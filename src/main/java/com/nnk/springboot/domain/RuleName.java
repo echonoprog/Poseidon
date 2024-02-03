@@ -1,14 +1,14 @@
 package com.nnk.springboot.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "rule")
 @Getter
 @Setter
-public class Rule {
+public class RuleName {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
