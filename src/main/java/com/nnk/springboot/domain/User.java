@@ -1,7 +1,6 @@
 package com.nnk.springboot.domain;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Entity

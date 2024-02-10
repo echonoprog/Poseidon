@@ -5,11 +5,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController
-{
+public class HomeController {
+
 	@RequestMapping("/")
 	public String home(Model model)
 	{
+		model.addAttribute("welcomeMessage", "Bienvenue sur notre application!");
 		return "home";
 	}
 

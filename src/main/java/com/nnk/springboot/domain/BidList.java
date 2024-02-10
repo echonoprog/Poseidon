@@ -1,9 +1,9 @@
 package com.nnk.springboot.domain;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class BidList {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
