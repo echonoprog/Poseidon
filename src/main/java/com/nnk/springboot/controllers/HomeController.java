@@ -10,14 +10,15 @@ public class HomeController {
 	@RequestMapping("/")
 	public String home(Model model)
 	{
-		model.addAttribute("welcomeMessage", "Bienvenue sur notre application!");
+
 		return "home";
 	}
 
 	@RequestMapping("/admin/home")
 	public String adminHome(Model model)
 	{
-		return "redirect:/bidList/list";
+
+		return "redirect:/user/list";
 	}
 
 

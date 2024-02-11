@@ -16,7 +16,7 @@ public class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tradeId", nullable = false, unique = true)
-    private Integer tradeId;
+    private Integer id;
 
     @Column(name = "account")
     private String account;

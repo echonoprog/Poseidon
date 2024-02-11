@@ -29,7 +29,7 @@ public class BidListController {
     @GetMapping("/bidList/add")
     public String addBidForm(Model model)
     {
-        model.addAttribute("bid", new BidList());
+        model.addAttribute("bidList", new BidList());
         return "bidList/add";
     }
 
@@ -47,7 +47,7 @@ public class BidListController {
     @GetMapping("/bidList/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         BidList bidList = bidListService.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
-        model.addAttribute("bid", bidList);
+        model.addAttribute("bidList", bidList);
         return "bidList/update";
     }
 
