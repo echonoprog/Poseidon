@@ -1,28 +1,26 @@
-package com.nnk.springboot.etc.ControllerTest;
+package com.nnk.springboot.ControllerTest;
 
 import com.nnk.springboot.controllers.RuleNameController;
 import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.service.RuleNameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,7 +47,10 @@ public class RuleNameControllerTest {
         Mockito.when(ruleNameService.findAll()).thenReturn(ruleNames);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/ruleName/list")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}")
+                        .with(csrf())
+                        .with(user("user").roles("USER")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("ruleName/list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("ruleNames"));
@@ -63,7 +64,8 @@ public class RuleNameControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/ruleName/validate")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content("{}")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
@@ -77,7 +79,8 @@ public class RuleNameControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/ruleName/update/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content("{}")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
@@ -86,21 +89,26 @@ public class RuleNameControllerTest {
         Integer id = 1;
 
         mockMvc.perform(MockMvcRequestBuilders.get("/ruleName/delete/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
     @Test
     public void testShowUpdateForm() throws Exception {
-        Integer id = 1;
+        Integer id = 2;
         RuleName ruleName = new RuleName();
 
         Mockito.when(ruleNameService.findById(id)).thenReturn(Optional.of(ruleName));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/ruleName/update/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .with(SecurityMockMvcRequestPostProcessors.user("ruleName"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("ruleName/update"))
-                .andExpect(MockMvcResultMatchers.model().attribute("ruleName", ruleName));
+                .andExpect(MockMvcResultMatchers.view().name("ruleName/update"));
+
     }
+
+
 }

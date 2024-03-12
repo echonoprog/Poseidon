@@ -40,7 +40,7 @@ public class BidListController {
         }
 
         bidListService.save(bidlist);
-        model.addAttribute("bidList",bidListService.findAll()); // à vérifier
+        model.addAttribute("bidList",bidListService.findAll());
         return "redirect:/bidList/list";
     }
 

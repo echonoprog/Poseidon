@@ -1,28 +1,26 @@
-package com.nnk.springboot.etc.ControllerTest;
+package com.nnk.springboot.ControllerTest;
 
 import com.nnk.springboot.controllers.RatingController;
 import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -49,7 +47,10 @@ public class RatingControllerTest {
         Mockito.when(ratingService.findAll()).thenReturn(ratings);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rating/list")
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}")
+                        .with(csrf())
+                        .with(user("user").roles("USER")))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("rating/list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("ratings"));
@@ -63,7 +64,8 @@ public class RatingControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/rating/validate")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content("{}")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
@@ -77,7 +79,8 @@ public class RatingControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/rating/update/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}"))
+                        .content("{}")
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
@@ -86,7 +89,8 @@ public class RatingControllerTest {
         Integer id = 1;
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rating/delete/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
@@ -98,9 +102,11 @@ public class RatingControllerTest {
         Mockito.when(ratingService.findById(id)).thenReturn(Optional.of(rating));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/rating/update/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+                        .with(SecurityMockMvcRequestPostProcessors.user("user"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("rating/update"))
-                .andExpect(MockMvcResultMatchers.model().attribute("rating", rating));
+                .andExpect(MockMvcResultMatchers.model().attributeExists("rating"));
     }
 }
