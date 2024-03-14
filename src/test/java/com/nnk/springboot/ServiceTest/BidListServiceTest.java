@@ -4,20 +4,22 @@ import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import com.nnk.springboot.service.BidListService;
 import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 public class BidListServiceTest {
 
     @Mock
@@ -26,19 +28,23 @@ public class BidListServiceTest {
     @InjectMocks
     private BidListService bidListService;
 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     public void testFindAll() {
         BidList bid1 = new BidList();
         BidList bid2 = new BidList();
-        List<BidList> bidList = Arrays.asList(bid1, bid2);
+        List<BidList> bidLists = Arrays.asList(bid1, bid2);
 
-        Mockito.when(bidListRepository.findAll()).thenReturn(bidList);
+        Mockito.when(bidListRepository.findAll()).thenReturn(bidLists);
 
         List<BidList> result = bidListService.findAll();
 
         Assert.assertEquals(2, result.size());
     }
-
     @Test
     public void testFindById() {
         BidList bid = new BidList();
@@ -48,8 +54,8 @@ public class BidListServiceTest {
 
         Optional<BidList> result = bidListService.findById(1);
 
-        Assert.assertTrue(result.isPresent());
-        Assert.assertEquals(bid.getId(), result.get().getId());
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals(bid.getId(), result.get().getId());
     }
 
     @Test
@@ -61,7 +67,7 @@ public class BidListServiceTest {
 
         BidList result = bidListService.save(bid);
 
-        Assert.assertEquals(bid.getId(), result.getId());
+        Assertions.assertEquals(bid.getId(), result.getId());
     }
 
     @Test

@@ -12,7 +12,6 @@ import java.util.Optional;
 public class BidListService {
 
     @Autowired
-
     private BidListRepository bidListRepository;
 
     public List<BidList> findAll() {

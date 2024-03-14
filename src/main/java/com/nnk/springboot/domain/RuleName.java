@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "rule")
+@Table(name = "rulename")
 @Getter
 @Setter
 public class RuleName {

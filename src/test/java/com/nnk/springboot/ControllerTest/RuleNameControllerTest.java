@@ -96,7 +96,7 @@ public class RuleNameControllerTest {
 
     @Test
     public void testShowUpdateForm() throws Exception {
-        Integer id = 2;
+        Integer id = 3;
         RuleName ruleName = new RuleName();
 
         Mockito.when(ruleNameService.findById(id)).thenReturn(Optional.of(ruleName));
