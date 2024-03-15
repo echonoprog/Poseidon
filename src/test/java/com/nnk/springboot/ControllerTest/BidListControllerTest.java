@@ -75,10 +75,20 @@ public class BidListControllerTest {
                 .andExpect(MockMvcResultMatchers.redirectedUrl("/bidList/list"));
     }
 
+    @Test
+    @WithMockUser(username = "user", roles = {"USER"})
+    public void testShowAddBidForm() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/bidList/add")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("bidList/add"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("bidList"));
+    }
 
 
 
     @Test
+    @WithMockUser(username = "user", roles = {"USER"})
     public void testUpdateBidList() throws Exception {
         Integer id = 1;
         BidList updatedBidList = new BidList();
@@ -88,23 +98,33 @@ public class BidListControllerTest {
 
         mvc.perform(MockMvcRequestBuilders.post("/bidList/update/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{}")
+                        .content("{\"bidListAttribute\": \"value\"}")
                         .with(csrf()))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/bidList/list"));
     }
 
 
     @Test
+    @WithMockUser(username = "user", roles = {"USER"})
     public void testDeleteBidList() throws Exception {
         Integer id = 1;
+        BidList bidList = new BidList();
 
-        mvc.perform(MockMvcRequestBuilders.delete("/bidList/delete/{id}", id)
+        Mockito.when(bidListService.findById(1)).thenReturn(Optional.of(bidList));
+
+        mvc.perform(MockMvcRequestBuilders.delete("/bidList/delete/{id}",id)
                         .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}")
                         .with(csrf()))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/bidList/list"));
+
     }
 
+
     @Test
+    @WithMockUser(username = "user", roles = {"USER"})
     public void testShowUpdateForm() throws Exception {
         Integer id = 1;
         BidList bidList = new BidList();
@@ -119,4 +139,5 @@ public class BidListControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("bidList/update"))
                 .andExpect(MockMvcResultMatchers.model().attribute("bidList", bidList));
     }
+
 }
