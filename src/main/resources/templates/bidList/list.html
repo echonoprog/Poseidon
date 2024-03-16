@@ -17,11 +17,16 @@
 			<a href="/ruleName/list">Rule</a>
 		</div>
 		<div class="col-6 text-right">
-			Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
+			Logged in user:
+			<b th:inline="text" class="user">
+				<span th:if="${oauthUsername != null}"><a th:text="${oauthUsername}"></a></span>
+				<span th:unless="${oauthUsername}"><a th:text="${username}"></a></span>
+			</b>
 			<form th:action="@{/app-logout}" method="POST">
 				<input type="submit" value="Logout"/>
 			</form>
 		</div>
+
 	</div>
 	<div class="row"><h2>Bid List</h2></div>
 	<div class="row">
@@ -44,7 +49,7 @@
 					<td th:text="${bidList.bidQuantity}"></td>
 					<td style="width: 15%" class="text-center">
 						<a th:href="@{/bidList/update/{id}(id=${bidList.id})}">Edit</a>&nbsp;|&nbsp;
-						<a th:href="@{/bidList/delete/{id}(id=${bidList.id})}">Delete</a>
+						<a th:href="@{/bidList/delete/{id}(id=${bidList.id})}"method="post">Delete</a>
 					</td>
 				</tr>
 			</tbody>

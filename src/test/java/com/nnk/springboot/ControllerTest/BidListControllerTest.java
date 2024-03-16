@@ -113,7 +113,7 @@ public class BidListControllerTest {
 
         Mockito.when(bidListService.findById(1)).thenReturn(Optional.of(bidList));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/bidList/delete/{id}",id)
+        mvc.perform(MockMvcRequestBuilders.get("/bidList/delete/{id}",id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))

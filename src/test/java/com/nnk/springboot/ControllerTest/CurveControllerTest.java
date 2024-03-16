@@ -107,7 +107,7 @@ public class CurveControllerTest {
 
         Mockito.when(curvePointService.findById(1)).thenReturn(Optional.of(curvePoint));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/curvePoint/delete/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.get("/curvePoint/delete/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))

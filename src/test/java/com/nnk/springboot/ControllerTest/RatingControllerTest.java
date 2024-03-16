@@ -107,7 +107,7 @@ public class RatingControllerTest {
 
         Mockito.when(ratingService.findById(1)).thenReturn(Optional.of(rating));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/rating/delete/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.get("/rating/delete/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))

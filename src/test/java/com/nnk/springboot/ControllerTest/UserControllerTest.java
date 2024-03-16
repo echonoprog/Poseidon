@@ -114,7 +114,7 @@ public class UserControllerTest {
 
         Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/user/delete/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.get("/user/delete/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))

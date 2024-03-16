@@ -107,7 +107,7 @@ public class RuleNameControllerTest {
 
         Mockito.when(ruleNameService.findById(1)).thenReturn(Optional.of(ruleName));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/ruleName/delete/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.get("/ruleName/delete/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))

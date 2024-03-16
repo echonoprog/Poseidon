@@ -107,7 +107,7 @@ public class TradeControllerTest {
 
         Mockito.when(tradeService.findById(1)).thenReturn(Optional.of(trade));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/trade/delete/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.get("/trade/delete/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}")
                         .with(csrf()))
