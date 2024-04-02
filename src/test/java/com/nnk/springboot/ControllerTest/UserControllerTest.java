@@ -45,17 +45,18 @@ public class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = "ADMIN")
     public void testGetAllUsers() throws Exception {
         List<User> users = new ArrayList<>();
         Mockito.when(userRepository.findAll()).thenReturn(users);
 
         mvc.perform(MockMvcRequestBuilders.get("/user/list")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .with(SecurityMockMvcRequestPostProcessors.user("username").roles("USER")))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("user/list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("users"));
     }
+
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
